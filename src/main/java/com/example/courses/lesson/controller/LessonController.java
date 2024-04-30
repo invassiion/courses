@@ -1,5 +1,6 @@
 package com.example.courses.lesson.controller;
 
+import com.example.courses.courses.dto.CourseResponseDTO;
 import com.example.courses.lesson.dto.LessonRequestDTO;
 import com.example.courses.lesson.dto.LessonResponseDTO;
 import com.example.courses.lesson.routes.LessonRoutes;
@@ -35,11 +36,11 @@ public class LessonController {
         return ResponseEntity.ok(responseDTO);
     }
 
-    @GetMapping(LessonRoutes.SEARCH)
-    public ResponseEntity<List<LessonResponseDTO>> searchLessons(@RequestParam String title) {
-        List<LessonResponseDTO> responseDTOS = lessonService.searchLessonsByTitle(title);
-        return ResponseEntity.ok(responseDTOS);
-    }
+//    @GetMapping(LessonRoutes.SEARCH)
+//    public ResponseEntity<List<LessonResponseDTO>> searchLessons(@RequestParam String title) {
+//        List<LessonResponseDTO> responseDTOS = lessonService.searchLessonsByTitle(title);
+//        return ResponseEntity.ok(responseDTOS);
+//    }
 
     @DeleteMapping(LessonRoutes.DELETE)
     public ResponseEntity<Void> deleteLesson(@PathVariable Long id) {
@@ -47,7 +48,15 @@ public class LessonController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping(LessonRoutes.SEARCH)
+    public ResponseEntity<List<LessonResponseDTO>> search(
+            @RequestParam(defaultValue = "") String query,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
 
+        List<LessonResponseDTO> responseDTOS = lessonService.search(query, page, size);
+        return ResponseEntity.ok(responseDTOS);
+    }
 
 
 

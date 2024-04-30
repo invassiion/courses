@@ -57,6 +57,8 @@ public class StudentService {
     student = studentRepository.save(student);
     return StudentResponseDTO.of(student);
     }
+
+
     public StudentResponseDTO getStudentById(Long id) {
       return StudentResponseDTO.of(studentRepository.findById(id).orElseThrow(StudentNotFoundException::new));
 

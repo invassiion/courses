@@ -35,11 +35,11 @@ public class CourseController {
         return ResponseEntity.ok(responseDTO);
     }
 
-    @GetMapping(CourseRoutes.SEARCH)
-    public ResponseEntity<List<CourseResponseDTO>> searchCourses(@RequestParam String title) {
-        List<CourseResponseDTO> responseDTOS  = courseService.searchCoursesByTitle(title);
-        return ResponseEntity.ok(responseDTOS);
-    }
+//    @GetMapping(CourseRoutes.SEARCH)
+//    public ResponseEntity<List<CourseResponseDTO>> searchCourses(@RequestParam String title) {
+//        List<CourseResponseDTO> responseDTOS  = courseService.searchCoursesByTitle(title);
+//        return ResponseEntity.ok(responseDTOS);
+//    }
 
     @DeleteMapping(CourseRoutes.DELETE)
     public ResponseEntity<Void> deleteCourse(@PathVariable Long id) {
@@ -47,5 +47,13 @@ public class CourseController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping(CourseRoutes.SEARCH)
+    public ResponseEntity<List<CourseResponseDTO>> search(
+            @RequestParam(defaultValue = "") String query,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        List<CourseResponseDTO> responseDTOS = courseService.search(query, page, size);
+        return ResponseEntity.ok(responseDTOS);
+    }
 
 }

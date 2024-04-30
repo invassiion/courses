@@ -1,1 +1,12 @@
 spring.application.name=courses
+server.port=8084
+
+spring.datasource.url=jdbc:postgresql://localhost:5434/courses
+spring.datasource.username=u
+spring.datasource.password=p
+
+spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+
+# Hibernate ddl auto (create, create-drop, validate, update)
+spring.jpa.hibernate.ddl-auto=update
