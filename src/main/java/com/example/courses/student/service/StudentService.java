@@ -11,6 +11,7 @@ import com.example.courses.student.model.StudentEntity;
 import com.example.courses.student.model.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,10 +28,33 @@ public class StudentService {
     private final StudentRepository studentRepository;
 
     @Autowired
-    private final CustomUserDetailsService customUserDetailsService;
-
-    @Autowired
     private final PasswordEncoder passwordEncoder;
+
+    @Value("${init.email}")
+    private String initUser;
+    @Value("${init.password}")
+    private String initPassword;
+
+    public StudentResponseDTO initStudent() {
+        Optional<StudentEntity> checkUser = studentRepository.findByEmail(initUser);
+        StudentEntity student;
+
+        if (checkUser.isEmpty()) {
+            student = StudentEntity.builder()
+                    .firstName("Default")
+                    .lastName("Default")
+                    .email(initUser)
+                    .password(passwordEncoder.encode(initPassword))
+                    .build();
+
+            student = studentRepository.save(student);
+        } else {
+            student = checkUser.get();
+        }
+        return StudentResponseDTO.of(student);
+    }
+
+
 
     public StudentResponseDTO registerStudent(RegistrationStudentRequest request) throws BadRequestException, StudentAlreadyExistException {
         request.validate();
@@ -49,7 +73,8 @@ public class StudentService {
     }
 
     public StudentResponseDTO updateStudent(Principal principal, EditStudentRequestDTO requestDTO) throws StudentNotFoundException {
-    StudentEntity student = studentRepository.findByEmail(principal.getName())
+    StudentEntity student = studentRepository
+            .findByEmail(principal.getName())
             .orElseThrow(StudentNotFoundException::new);
     student.setFirstName(requestDTO.getFirstName());
     student.setLastName(requestDTO.getLastName());

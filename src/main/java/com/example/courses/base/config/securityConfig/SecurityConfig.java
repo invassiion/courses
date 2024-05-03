@@ -2,6 +2,7 @@ package com.example.courses.base.config.securityConfig;
 
 import com.example.courses.base.config.BaseRoutes;
 import com.example.courses.base.service.CustomUserDetailsService;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,8 +29,8 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(BaseRoutes.NOT_SECURED + "/**").anonymous()
-                        .anyRequest().authenticated())
+                        .requestMatchers(BaseRoutes.API + "/**").authenticated()
+                        .anyRequest().anonymous())
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(AbstractHttpConfigurer::disable)
                 .userDetailsService(userDetailsService)
